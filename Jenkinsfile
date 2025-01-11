@@ -11,7 +11,7 @@ pipeline {
                 }
             }
             steps {
-                cleanWs()
+                // cleanWs()
                 sh '''
                     mkdir -p /home/jenkins/.npm
                     npm config set cache /home/jenkins/.npm
