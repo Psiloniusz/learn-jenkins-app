@@ -6,12 +6,13 @@ pipeline {
             agent {
                 docker {
                     image 'node:18-alpine'
+                    args '-u root'
                     reuseNode true
                 }
             }
             steps {
+                cleanWs()
                 sh '''
-                    chown -R 1001:1001 "/.npm"
                     ls -la
                     node --version
                     npm --version
