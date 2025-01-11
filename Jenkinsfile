@@ -12,16 +12,16 @@ pipeline {
             }
             steps {
                 cleanWs()
-                sh '''
-                    npm config set cache "$(pwd)/.npm"
-                    ls -la
-                    node --version
-                    npm --version
-                    npm cache clean --force
-                    npm ci
-                    npm run build
-                    ls -la
-                '''
+                // sh '''
+                    sh 'npm config set cache "$(pwd)/.npm"'
+                    sh 'ls -la'
+                    sh 'node --version'
+                    sh 'npm --version'
+                    sh 'npm cache clean --force'
+                    sh 'npm ci'
+                    sh 'npm run build'
+                    sh 'ls -la'
+                // '''
             }
         }
     }
