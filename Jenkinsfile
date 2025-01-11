@@ -13,8 +13,8 @@ pipeline {
             steps {
                 cleanWs()
                 // sh '''
-                    sh 'npm config set cache "$(pwd)/.npm"'
                     sh 'ls -la'
+                    sh 'npm config set cache "$(pwd)/.npm"'
                     sh 'node --version'
                     sh 'npm --version'
                     sh 'npm cache clean --force'
