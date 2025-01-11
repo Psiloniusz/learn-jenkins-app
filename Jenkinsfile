@@ -11,7 +11,7 @@ pipeline {
                 }
             }
             steps {
-                // cleanWs()
+                cleanWs()
                 // sh '''
                     sh 'ls -la'
                     sh 'npm config set cache "$(pwd)/.npm"'
