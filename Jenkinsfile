@@ -18,8 +18,8 @@ pipeline {
                     sh 'node --version'
                     sh 'npm --version'
                     sh 'npm cache clean --force'
-                    sh 'npm ci'
-                    sh 'npm run build'
+                    // sh 'npm ci'
+                    // sh 'npm run build'
                     sh 'ls -la'
                 // '''
             }
