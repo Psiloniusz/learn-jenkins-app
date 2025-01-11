@@ -11,13 +11,13 @@ pipeline {
                 }
             }
             steps {
-                // cleanWs()
+                cleanWs()
                 sh '''
-                    mkdir -p /home/jenkins/.npm
-                    npm config set cache /home/jenkins/.npm
+                    npm config set cache "$(pwd)/.npm"
                     ls -la
                     node --version
                     npm --version
+                    npm cache clean --force
                     npm ci
                     npm run build
                     ls -la
