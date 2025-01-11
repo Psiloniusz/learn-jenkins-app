@@ -11,7 +11,7 @@ pipeline {
             }
             steps {
                 sh '''
-                    sudo chown -R 1001:1001 "/.npm"
+                    chown -R 1001:1001 "/.npm"
                     ls -la
                     node --version
                     npm --version
