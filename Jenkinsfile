@@ -5,12 +5,13 @@ pipeline {
         stage('Build') {
             agent {
                 docker {
-                    image 'node:lts-alpine3.21'
+                    image 'node:18-alpine'
                     reuseNode true
                 }
             }
             steps {
                 sh '''
+                    sudo chown -R 1001:1001 "/.npm"
                     ls -la
                     node --version
                     npm --version
