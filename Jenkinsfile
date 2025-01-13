@@ -6,28 +6,19 @@ pipeline {
             agent {
                 docker {
                     image 'node:18-alpine'
-                    args '-u root'
                     reuseNode true
                 }
             }
             steps {
-                cleanWs()
-                // sh '''
-                    sh 'ls -la'
-                    sh 'npm config set cache "$(pwd)/.npm"'
-                    sh 'node --version'
-                    sh 'npm --version'
-                    sh 'npm cache clean --force'
-                    // sh 'npm ci'
-                    // sh 'npm run build'
-                    sh 'ls -la'
-                // '''
+                sh '''
+                    ls -la
+                    node --version
+                    npm --version
+                    npm ci
+                    npm run build
+                    ls -la
+                '''
             }
-            steps {
-                retry(2) {
-                    sh 'npm ci'
-                }
-}
         }
     }
 }
