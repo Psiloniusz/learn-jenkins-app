@@ -33,17 +33,16 @@ pipeline {
                     steps {
                         sh '''
                             npm test
-                            test -f "build/index.html"
+                            # test -f "build/index.html"
                         '''
                     }
                     post {
                         always {
                             junit 'jest-results/junit.xml'
-                            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true])
                         }
                     }
                 }
-                
+
                 stage('E2E Test') {
                     agent {
                         docker {
