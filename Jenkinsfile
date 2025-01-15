@@ -1,6 +1,14 @@
 pipeline {
     agent any
 
+    parameters {
+        string(name: 'NETLIFY_SITE_ID', defaultValue: '', description: 'Netlify Site ID')
+    }
+
+    environment {
+        NETLIFY_AUTH_TOKEN = credentials('netlify-token')
+    }
+
     stages {
         stage('Build') {
             agent {
@@ -78,6 +86,10 @@ pipeline {
                 sh '''
                     npm install netlify-cli
                     node_modules/.bin/netlify --version
+                    // Access parameters using params object
+                    echo "Deploying to site: ${params.NETLIFY_SITE_ID}"
+                    // Access credentials using environment variable
+                    echo "Using auth token: ${NETLIFY_AUTH_TOKEN}"
                 '''
             }
         }
