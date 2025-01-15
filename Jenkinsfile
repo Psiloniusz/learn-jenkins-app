@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'NETLIFY_SITE_ID', description: 'Netlify Site ID')
+        string(name: 'NETLIFY_SITE_ID', defaultValue: params.NETLIFY_SITE_ID ?: 'default-value', description: 'Netlify Site ID')
     }
 
     environment {
@@ -88,7 +88,7 @@ pipeline {
                 sh '''
                     npm install netlify-cli
                     node_modules/.bin/netlify --version
-                    echo "Deploying to production. Site ID: ${params.NETLIFY_SITE_ID}"
+                    echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
                     node_modules/.bin/netlify status
                     node_modules/.bin/netlify deploy --dir=build --prod
                 '''
