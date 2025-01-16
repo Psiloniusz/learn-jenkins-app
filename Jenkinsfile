@@ -12,6 +12,14 @@ pipeline {
 
     stages {
 
+        stage('Docker Image') {
+            steps {
+                script {
+                    sh 'docker build -t jenkins-app .'
+                }
+            }
+        }
+
         stage('Build') {
             agent {
                 docker {
