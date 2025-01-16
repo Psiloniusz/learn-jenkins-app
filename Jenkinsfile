@@ -92,11 +92,11 @@ pipeline {
                     node_modules/.bin/netlify status
                     node_modules/.bin/netlify deploy --dir=build --json --message "Deployed from Jenkins" --site $NETLIFY_SITE_ID > deploy-output.json
                     node_modules/.bin/node-jq -r '.deploy_url' deploy-output.json
-                    // node -e "console.log(require('jsonpath').query(require('./deploy-output.json'), '$.deploy_url')[0])"
+                    # node -e "console.log(require('jsonpath').query(require('./deploy-output.json'), '$.deploy_url')[0])"
                 '''
                 script {
-                    def deployUrl = readFile('deploy-output.json').readJSON().deploy_url
-                    echo "Deployed to staging at: $deployUrl"
+                    def deployUrl = readJSON(file: 'deploy-output.json').deploy_url
+                    echo "Deployed to staging at: ${deployUrl}"
                     env.CI_ENVIRONMENT_URL = deployUrl
                 }
             }
