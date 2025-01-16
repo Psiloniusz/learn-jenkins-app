@@ -86,12 +86,13 @@ pipeline {
             }
             steps {
                 sh '''
-                    npm install jsonpath
-                    npm install netlify-cli
+                    npm install netlify-cli jsonpath node-jq
                     node_modules/.bin/netlify --version
                     echo "Deploying to staging. Site ID: $NETLIFY_SITE_ID"
                     node_modules/.bin/netlify status
-                    node_modules/.bin/netlify deploy --dir=build --json --message "Deployed from Jenkins" --site $NETLIFY_SITE_ID | node_modules/.bin/jsonpath '$.deploy_url'
+                    node_modules/.bin/netlify deploy --dir=build --json --message "Deployed from Jenkins" --site $NETLIFY_SITE_ID > deploy-output.json
+                    node_modules/.bin/node-jq -r '.deploy_url' deploy-output.json
+                    node -e "console.log(require('jsonpath').query(require('./deploy-output.json'), '$.deploy_url')[0])"
                 '''
             }
         }
