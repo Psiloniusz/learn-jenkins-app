@@ -23,7 +23,8 @@ pipeline {
         stage('Build') {
             agent {
                 docker {
-                    image 'node:18-alpine3.20'
+                    // image 'node:18-alpine3.20'
+                    image 'jenkins-app'
                     reuseNode true
                 }
             }
@@ -45,7 +46,8 @@ pipeline {
                 stage('Unit Test') {
                     agent {
                         docker {
-                            image 'node:18-alpine3.20'
+                            // image 'node:18-alpine3.20'
+                            image 'jenkins-app'
                             reuseNode true
                         }
                     }
@@ -65,15 +67,17 @@ pipeline {
                 stage('E2E Test') {
                     agent {
                         docker {
-                            image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                            // image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                            image 'jenkins-app'
                             reuseNode true
                         }
                     }
                     steps {
                         sh '''
-                            npm install serve
-                            node_modules/.bin/serve -s build &
-                            sleep 10
+                            # npm install serve
+                            #node_modules/.bin/serve -s build &
+                            serve -s build &
+                            #sleep 10
                             npx playwright test --reporter=html
                         '''
                     }
@@ -112,7 +116,8 @@ pipeline {
         stage('Deploy staging') {
             agent {
                 docker {
-                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    // image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    image 'jenkins-app'
                     reuseNode true
                 }
             }
@@ -123,14 +128,19 @@ pipeline {
 
             steps {
                 sh '''
-                    npm install netlify-cli jsonpath node-jq
-                    node_modules/.bin/netlify --version
+                    # npm install netlify-cli jsonpath node-jq
+                    # node_modules/.bin/netlify --version
+                    netlify --version
                     echo "Deploying to staging. Site ID: $NETLIFY_SITE_ID"
-                    node_modules/.bin/netlify status
-                    node_modules/.bin/netlify deploy --dir=build --json --message "Deployed from Jenkins" --site $NETLIFY_SITE_ID > deploy-output.json
-                    node_modules/.bin/node-jq -r '.deploy_url' deploy-output.json
+                    # node_modules/.bin/netlify status
+                    netlify status
+                    #node_modules/.bin/netlify deploy --dir=build --json --message "Deployed from Jenkins" --site $NETLIFY_SITE_ID > deploy-output.json
+                    netlify deploy --dir=build --json --message "Deployed from Jenkins" --site $NETLIFY_SITE_ID > deploy-output.json
+                    # node_modules/.bin/node-jq -r '.deploy_url' deploy-output.json
+                    node-jq -r '.deploy_url' deploy-output.json
                     # node -e "console.log(require('jsonpath').query(require('./deploy-output.json'), '$.deploy_url')[0])"
-                    CI_ENVIRONMENT_URL=$(node_modules/.bin/node-jq -r '.deploy_url' deploy-output.json)
+                    # CI_ENVIRONMENT_URL=$(node_modules/.bin/node-jq -r '.deploy_url' deploy-output.json)
+                    CI_ENVIRONMENT_URL=$(node-jq -r '.deploy_url' deploy-output.json)
                     npx playwright test  --reporter=html
                 '''
             }
@@ -153,7 +163,8 @@ pipeline {
         stage('Deploy Production') {
             agent {
                 docker {
-                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    // image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    image 'jenkins-app'
                     reuseNode true
                 }
             }
@@ -164,11 +175,14 @@ pipeline {
 
             steps {
                 sh '''
-                    npm install netlify-cli
-                    node_modules/.bin/netlify --version
+                    # npm install netlify-cli
+                    # node_modules/.bin/netlify --version
+                    netlify --version
                     echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
-                    node_modules/.bin/netlify status
-                    node_modules/.bin/netlify deploy --dir=build --prod
+                    # node_modules/.bin/netlify status
+                    netlify status
+                    # node_modules/.bin/netlify deploy --dir=build --prod
+                    netlify deploy --dir=build --prod
                     npx playwright test  --reporter=html
                 '''
             }
