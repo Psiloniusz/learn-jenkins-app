@@ -95,9 +95,7 @@ pipeline {
                     # node -e "console.log(require('jsonpath').query(require('./deploy-output.json'), '$.deploy_url')[0])"
                 '''
                 script {
-                    def deployUrl = readJSON(file: 'deploy-output.json').deploy_url
-                    echo "Deployed to staging at: ${deployUrl}"
-                    env.CI_ENVIRONMENT_URL = deployUrl
+                    env.STAGING_URL = sh(script: "node_modules/.bin/node-jq -r '.deploy_url' deploy-output.json", returnStdout: true)
                 }
             }
         }
@@ -111,7 +109,7 @@ pipeline {
             }
 
             environment {
-                CI_ENVIRONMENT_URL = "$env.CI_ENVIRONMENT_URL"
+                CI_ENVIRONMENT_URL = "$env.STAGING_URL"
             }
 
             steps {
