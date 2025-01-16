@@ -86,7 +86,7 @@ pipeline {
             }
             steps {
                 sh '''
-                    npm install -g @jsware/jsonpath-cli
+                    npm install jsonpath
                     npm install netlify-cli
                     node_modules/.bin/netlify --version
                     echo "Deploying to staging. Site ID: $NETLIFY_SITE_ID"
