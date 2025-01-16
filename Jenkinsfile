@@ -91,7 +91,7 @@ pipeline {
                     node_modules/.bin/netlify --version
                     echo "Deploying to staging. Site ID: $NETLIFY_SITE_ID"
                     node_modules/.bin/netlify status
-                    node_modules/.bin/netlify deploy --dir=build --json --message "Deployed from Jenkins" --site $NETLIFY_SITE_ID | jpp '$.deploy_url'
+                    node_modules/.bin/netlify deploy --dir=build --json --message "Deployed from Jenkins" --site $NETLIFY_SITE_ID | node_modules/.bin/jsonpath '$.deploy_url'
                 '''
             }
         }
